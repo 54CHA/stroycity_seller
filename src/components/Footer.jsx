@@ -1,17 +1,7 @@
 const Footer = () => {
   return (
     <footer className=" w-[87%] m-auto">
-      <div className="flex justify-between mt-20 mb-20 text-[25px] font-thin text-gray-400">
-        <div className="flex-col">
-          <b className="text-black">Покупателям </b>
-          <p>Вопросы и ответы</p>
-          <br />
-          <b className="text-black">Продавцам </b>
-          <p>Стать продавцом</p>
-          <br/>
-          <b className="text-black">Курьерам </b>
-          <p>Стать курьером</p>
-        </div>
+      <div className="flex justify-end gap-[15%] mt-20 mb-20 text-[25px] font-thin text-gray-400">
         <div className="flex-col">
           <b className="text-black">Каталог товаров</b>
           <p>Материалы</p>

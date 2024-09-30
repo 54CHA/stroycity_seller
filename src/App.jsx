@@ -15,6 +15,7 @@ import axios from "axios";
 import toastr from "toastr";
 import "toastr/build/toastr.min.css";
 import AdminPanel from "./components/Admin";
+import ProductList from "./components/ProductList";
 
 function App() {
   return (
@@ -24,27 +25,13 @@ function App() {
           path="/"
           element={
             <>
-              {" "}
               <Navbar />
               <MainPage />
-              <Divider/>
+              <Divider />
               <Footer />
             </>
           }
         />
-        <Route element={<ProtectedRoute />}>
-          <Route
-            path="/LoggedInPage"
-            element={
-              <>
-                <LoggedInNavbar />
-                <LoggedInPage />
-                <Divider/>
-                <Footer />
-              </>
-            }
-          />
-        </Route>
         <Route
           path="/SignIn"
           element={
@@ -62,27 +49,59 @@ function App() {
           }
         />
         <Route
-          path="/CreateProduct"
-          element={
-            <>
-              <Navbar />
-              <CreateProduct />
-              <Footer />
-            </>
-          }
-        />
-      </Routes>
-      <Routes>
-      <Route
           path="/AdminPanel"
           element={
             <>
               <Navbar />
-              <AdminPanel/>
+              <AdminPanel />
               <Footer />
             </>
           }
         />
+        <Route element={<ProtectedRoute />}>
+          <Route
+            path="/Store"
+            element={
+              <>
+                <LoggedInNavbar />
+                <LoggedInPage />
+                <Divider />
+                <Footer />
+              </>
+            }
+          />
+          <Route
+            path="/LoggedInPage"
+            element={
+              <>
+                <LoggedInNavbar />
+                <LoggedInPage />
+                <Divider />
+                <Footer />
+              </>
+            }
+          />
+          <Route
+            path="/ProductList/CreateProduct"
+            element={
+              <>
+                <LoggedInNavbar />
+                <CreateProduct />
+                <Footer />
+              </>
+            }
+          />
+          <Route
+            path="/ProductList"
+            element={
+              <>
+                <LoggedInNavbar />
+                <ProductList />
+                <Footer />
+              </>
+            }
+          />
+        </Route>
       </Routes>
     </Router>
   );

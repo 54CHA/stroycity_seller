@@ -9,7 +9,7 @@ const LoggedInPage = () => {
       </div>
       <div />
       <Link
-        to="catalog"
+        to="/Store"
         className="ml-[40%] w-2.5/12 text-white text-[2vw] bg-[#FF8900] py-5 px-7 hover:bg-[#ff6a00] hover:scale-[1.01] transition-all duration-200"
       >
         Открыть каталог

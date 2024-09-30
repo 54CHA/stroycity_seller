@@ -10,4 +10,6 @@
   box-sizing: border-box;
 }
 
-
+input::placeholder {
+  color: #363636;
+}
