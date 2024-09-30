@@ -1,12 +1,18 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-import { faHeart } from "@fortawesome/free-regular-svg-icons";
-import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
-import { faUser } from "@fortawesome/free-regular-svg-icons";
-import { useEffect } from "react";
+import {
+  faBars,
+  faMagnifyingGlass,
+  faHeart,
+  faCartShopping,
+  faUser,
+} from "@fortawesome/free-solid-svg-icons";
+import { faUser as faUserRegular } from "@fortawesome/free-regular-svg-icons";
+import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 const Navbar = () => {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
   useEffect(() => {
     var Tawk_API = Tawk_API || {},
       Tawk_LoadStart = new Date();
@@ -23,23 +29,45 @@ const Navbar = () => {
 
   return (
     <nav>
-      <div className="w-full h-[100px] bg-white flex items-center justify-between border border-[#cacaca] ">
-        {" "}
-        {/* Added border here */}
-        <Link to="/" className="flex items-center gap-3">
-          {" "}
-          {/* Added border here */}
-          <div className="w-[45px] h-[45px] bg-gray-400 ml-10"></div>
-          <div className="text-[#ff8800] text-[30px] sm:text-[40px] md:text-[50px] font-bold border-[#cacaca] h-[100px] flex items-center">
-            Строй сити
+      <div className="w-full h-[100px] bg-white flex items-center justify-between border border-[#cacaca]">
+        <div className="flex items-center">
+          <Link to="/" className="flex items-center gap-3">
+            <img src="./logo.png" alt="logo" className="w-[50px] ml-10" />
+            <div className="text-[#ff8800] text-[30px] sm:text-[40px] md:text-[50px] font-bold border-[#cacaca] h-[100px] flex items-center">
+              СТРОЙ СИТИ
+            </div>
+          </Link>
+        </div>
+        <div className="flex items-center border-l border-r border-[#cacaca] h-full align-">
+          <div
+            className=" cursor-pointer items-center flex"
+            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+          >
+            <FontAwesomeIcon
+              icon={faBars}
+              className="size-[20px] h-[100px] pl-10 text-[#ff8800] transition duration-300"
+            />
           </div>
-        </Link>
-        <Link
-          to="/catalog"
-          className="text-[#ff8800] text-[18px] sm:text-[25px] font-bold border-r border-l px-20 border-[#cacaca] h-full flex items-center "
-        >
-          Каталог товаров
-        </Link>
+          {isDropdownOpen && (
+            <div className="absolute top-[100px] left-0 bg-white border border-[#cacaca] p-4">
+              <Link to="/" className="block py-2 hover:text-[#ff8800]">
+                Главная
+              </Link>
+              <Link to="/about" className="block py-2 hover:text-[#ff8800]">
+                О компании
+              </Link>
+              <Link to="/contact" className="block py-2 hover:text-[#ff8800]">
+                Контакты
+              </Link>
+            </div>
+          )}
+          <Link
+            to="/catalog"
+            className="text-[#ff8800] text-[18px] sm:text-[25px] font-bold pr-10 pl-5 h-full flex items-center"
+          >
+            Каталог товаров
+          </Link>
+        </div>
         <div className="hidden lg:flex space-x-8">
           <a className="text-[#363636] text-sm sm:text-base md:text-lg lg:text-xl font-medium hover:text-[#ff8800] transition duration-300">
             Доставка и оплата
@@ -48,11 +76,10 @@ const Navbar = () => {
             О компании
           </a>
           <a className="text-[#363636] text-sm sm:text-base md:text-lg lg:text-xl font-medium hover:text-[#ff8800] transition duration-300">
-          FAQ
+            Стать продавцом
           </a>
         </div>
         <div className="flex items-center justify-center">
-          {/* Centered icons */} {/* Added border here */}
           <FontAwesomeIcon
             icon={faMagnifyingGlass}
             className="size-[20px] border-l border-[#cacaca] h-[100px] px-10 hover:text-[#ff8800] transition duration-300"
@@ -77,9 +104,9 @@ const Navbar = () => {
               0
             </div>
           </div>
-          <Link to="/LoggedInPage">
+          <Link to="/user">
             <FontAwesomeIcon
-              icon={faUser}
+              icon={faUserRegular}
               className="size-[20px] border-l border-[#cacaca] h-[100px] px-10 hover:text-[#ff8800] transition duration-300"
             />
           </Link>
@@ -88,4 +115,5 @@ const Navbar = () => {
     </nav>
   );
 };
+
 export default Navbar;

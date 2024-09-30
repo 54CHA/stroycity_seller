@@ -14,6 +14,7 @@ import Divider from "./components/Divider";
 import axios from "axios";
 import toastr from "toastr";
 import "toastr/build/toastr.min.css";
+import AdminPanel from "./components/Admin";
 
 function App() {
   return (
@@ -66,6 +67,18 @@ function App() {
             <>
               <Navbar />
               <CreateProduct />
+              <Footer />
+            </>
+          }
+        />
+      </Routes>
+      <Routes>
+      <Route
+          path="/AdminPanel"
+          element={
+            <>
+              <Navbar />
+              <AdminPanel/>
               <Footer />
             </>
           }
