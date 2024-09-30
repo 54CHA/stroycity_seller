@@ -16,9 +16,9 @@ const ProductList = () => {
           Товары
         </div>
         <div className="flex justify-between items-center">
-          <div className="text-[#363636] text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-bold mb-10 mt-10 ">
+          <h className="text-[#363636] text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-bold mb-10 mt-10 ">
             Список товаров
-          </div>
+          </h>
           <Link
             to="CreateProduct"
             className="bg-[#ff8900] text-white text-[20px] sm:text-[20px] md:text-[30px] p-2 py-4 w-[300px] text-center block hover:bg-[#ff6a00] hover:scale-[1.01] transition-all duration-200"

@@ -4,9 +4,11 @@ import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const CreateProduct = () => {
+  const apiUrl = "http://api.bigbolts.ru";
+
   const [formData, setFormData] = useState({
     name: "",
-    category: "",
+    category_id: "",
     articleNumber: "",
     price: "",
     discountPrice: "",
