@@ -8,12 +8,13 @@ const LoggedInPage = () => {
         LOGGEDIN IPSUM ODOR AMET, CONSEC
       </div>
       <div />
-      <Link
-        to="/Store"
+      <a
+        href="https://stroycity.vercel.app/catalog"
+        target="_blank"
         className="ml-[40%] w-2.5/12 text-white text-[2vw] bg-[#FF8900] py-5 px-7 hover:bg-[#ff6a00] hover:scale-[1.01] transition-all duration-200"
       >
         Открыть каталог
-      </Link>
+      </a>
       <div className="w-[2.5%] h-[5%] left-[92.5%] top-[35%] absolute transition-colors hover:bg-[#ff5a00]/50">
         <button className="w-full h-full left-0 top-0 absolute bg-[#ff8800]/50" />
         <img
