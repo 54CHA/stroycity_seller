@@ -22,11 +22,7 @@ const Navbar = () => {
       <div className="w-full h-[100px] bg-white flex items-center border border-[#cacaca]">
         <div className="flex items-center">
           <Link to="/" className="flex items-center gap-3">
-            <img
-              src="/src/assets/logo.png"
-              alt="logo"
-              className="w-[50px] ml-10"
-            />
+            <img src="/images/logo.png" alt="logo" className="w-[50px] ml-10" />
             <div className="text-[#ff8800] text-[30px] sm:text-[40px] md:text-[50px] font-bold border-[#cacaca] h-[100px] flex items-center pr-10">
               СТРОЙ СИТИ
             </div>
