@@ -30,7 +30,7 @@ const Navbar = () => {
         </div>
         <div className="flex items-center border-l border-r border-[#cacaca] h-full ">
           <Link
-            to="/catalog"
+            to="/Store"
             className="text-[#ff8800] text-[18px] sm:text-[25px] font-bold px-10 h-full flex items-center"
           >
             Стать продавцом
