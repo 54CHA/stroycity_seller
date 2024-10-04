@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import toastr from "toastr";
 import { Link, useNavigate } from "react-router-dom";
@@ -34,7 +34,7 @@ const AuthPage = () => {
 
     try {
       const response = await axios.post(
-        "https://api.bigbolts.ru/sign_up/seller",
+        "https://api.bigbolts.ru/sign-up/seller",
         userData,
         {
           headers: {
@@ -43,24 +43,19 @@ const AuthPage = () => {
         }
       );
 
-      if (response.status === 200) {
+      if (response.status === 201) {
         // Handle successful response
-        toastr.success("User data sent successfully");
-        console.log("User data sent successfully");
-        const token = response.data.token; // Assuming the token is returned in the 'token' field
-
-        // Store the token in a cookie
-        document.cookie = `jwt=${token}; path=/; secure; samesite=strict`;
-        // You might want to redirect the user or update the UI here
+        toastr.success("Регистрация прошла успешно");
+        console.log("User registered successfully");
+        navigate("/user"); // Redirect to the home page
       } else {
         // Handle error response
-        toastr.error("Failed to send user data");
-        console.error("Failed to send user data");
+        toastr.error("Не удалось зарегистрироваться");
+        console.error("Failed to register user");
       }
-      navigate("/"); // Redirect to the home page or any other desired page
     } catch (error) {
       // Handle network or server error
-      toastr.error("Error: " + error.message);
+      toastr.error("Ошибка: " + error.message);
       console.error("Error:", error);
     }
   };
