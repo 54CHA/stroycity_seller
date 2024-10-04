@@ -43,7 +43,7 @@ const ManageCategories = () => {
   const handleCreateCategory = () => {
     if (newCategory.trim() === "") return; // prevent empty category creation
     axios
-      .post(apiUrl + "/category", { name: newCategory })
+      .post(apiUrl + "/admin/category", { name: newCategory }) // Updated path
       .then((response) => {
         setCategories([...categories, response.data]);
         setNewCategory("");
@@ -56,7 +56,7 @@ const ManageCategories = () => {
   const handleCreateBrand = () => {
     if (newBrand.trim() === "") return;
     axios
-      .post(apiUrl + "/brand", { name: newBrand })
+      .post(apiUrl + "/admin/brand", { name: newBrand }) // Updated path
       .then((response) => {
         setBrands([...brands, response.data]);
         setNewBrand("");
@@ -69,7 +69,7 @@ const ManageCategories = () => {
   const handleCreateMaterial = () => {
     if (newMaterial.trim() === "") return;
     axios
-      .post(apiUrl + "/material", { name: newMaterial })
+      .post(apiUrl + "/admin/material", { name: newMaterial }) // Updated path
       .then((response) => {
         setMaterials([...materials, response.data]);
         setNewMaterial("");
@@ -82,7 +82,7 @@ const ManageCategories = () => {
   const handleDeleteCategory = (categoryId) => {
     if (window.confirm("Are you sure you want to delete this category?")) {
       axios
-        .delete(apiUrl + `/category?category_id=${categoryId}`)
+        .delete(apiUrl + `/admin/category?category_id=${categoryId}`) // Updated path
         .then((response) => {
           setCategories(
             categories.filter((category) => category.id !== categoryId)
@@ -97,7 +97,7 @@ const ManageCategories = () => {
   const handleDeleteBrand = (brandId) => {
     if (window.confirm("Are you sure you want to delete this brand?")) {
       axios
-        .delete(apiUrl + `/brand?brand_id=${brandId}`)
+        .delete(apiUrl + `/admin/brand?brand_id=${brandId}`) // Updated path
         .then((response) => {
           setBrands(brands.filter((brand) => brand.id !== brandId));
         })
@@ -110,7 +110,7 @@ const ManageCategories = () => {
   const handleDeleteMaterial = (materialId) => {
     if (window.confirm("Are you sure you want to delete this material?")) {
       axios
-        .delete(apiUrl + `/material?material_id=${materialId}`)
+        .delete(apiUrl + `/admin/material?material_id=${materialId}`) // Updated path
         .then((response) => {
           setMaterials(
             materials.filter((material) => material.id !== materialId)

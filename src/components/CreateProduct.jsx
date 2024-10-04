@@ -2,22 +2,57 @@ import { Link } from "react-router-dom";
 import { useState } from "react"; // Add this import
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import axios from "axios";
+import { useEffect } from "react"; // Add this import
 
 const CreateProduct = () => {
-  const apiUrl = "http://api.bigbolts.ru";
+  const apiUrl = "https://api.bigbolts.ru";
 
   const [formData, setFormData] = useState({
+    article: "",
+    brand: "",
+    brand_id: "",
     name: "",
-    category_id: "",
-    articleNumber: "",
-    price: "",
-    discountPrice: "",
-    length: "",
-    width: "",
-    height: "",
-    weight: "",
-    images: [],
+    description: "", // Add this new field
+    // ... other form fields ...
   });
+
+  const [materials, setMaterials] = useState([]); // Add state for materials
+  const [categories, setCategories] = useState([]); // Add state for categories
+  const [brands, setBrands] = useState([]); // Add state for brands
+
+  useEffect(() => {
+    const fetchMaterials = async () => {
+      try {
+        const response = await axios.get(apiUrl + "/material");
+        setMaterials(response.data); // Assuming the API returns an array of materials
+      } catch (error) {
+        console.error("Error fetching materials:", error);
+      }
+    };
+
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get(apiUrl + "/category");
+        setCategories(response.data); // Assuming the API returns an array of categories
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    const fetchBrands = async () => {
+      try {
+        const response = await axios.get(apiUrl + "/brand");
+        setBrands(response.data); // Assuming the API returns an array of brands
+      } catch (error) {
+        console.error("Error fetching brands:", error);
+      }
+    };
+
+    fetchMaterials();
+    fetchCategories();
+    fetchBrands(); // Fetch brands on component mount
+  }, []); // Fetch materials and categories on component mount
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -34,20 +69,19 @@ const CreateProduct = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("YOUR_API_ENDPOINT", {
-        method: "POST",
+      const requestBody = {
+        
+      };
+
+      const response = await axios.post(apiUrl + "/seller/item", requestBody, {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
       });
 
-      if (response.ok) {
-        // Handle successful response
+      if (response.status === 200) {
         console.log("Product created successfully");
-        // You might want to redirect the user or update the UI here
       } else {
-        // Handle error response
         console.error("Failed to create product");
       }
     } catch (error) {
@@ -107,15 +141,48 @@ const CreateProduct = () => {
               required
               className="bg-[#DFDFDF] border border-[#363636] p-4 my-2"
             />
-            <input
-              type="text"
+            <select
+              name="brand"
+              value={formData.brand}
+              onChange={handleInputChange}
+              required
+              className="bg-[#DFDFDF] border border-[#363636] p-4 my-2"
+            >
+              <option value="">Выберите бренд</option>
+              {brands.map((brand) => (
+                <option key={brand.id} value={brand.id}>
+                  {brand.name}
+                </option>
+              ))}
+            </select>
+            <select
+              name="material"
+              value={formData.material}
+              onChange={handleInputChange}
+              required
+              className="bg-[#DFDFDF] border border-[#363636] p-4 my-2"
+            >
+              <option value="">Выберите материал</option>
+              {materials.map((material) => (
+                <option key={material.id} value={material.name}>
+                  {material.name}
+                </option>
+              ))}
+            </select>
+            <select
               name="category"
               value={formData.category}
               onChange={handleInputChange}
-              placeholder="Категория Товара"
               required
               className="bg-[#DFDFDF] border border-[#363636] p-4 my-2"
-            />
+            >
+              <option value="">Выберите категорию</option>
+              {categories.map((category) => (
+                <option key={category.id} value={category.name}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
             <input
               type="text"
               name="articleNumber"
@@ -143,6 +210,22 @@ const CreateProduct = () => {
               className="bg-[#DFDFDF] border border-[#363636] p-4 my-2"
             />
           </div>
+          
+          {/* New description section */}
+          <div className="flex flex-col mb-5">
+            <h1 className="text-[#363636] text-3xl sm:text-3xl md:text-4xl lg:text-4xl font-bold mb-10 mt-5">
+              Описание товара
+            </h1>
+            <textarea
+              name="description"
+              value={formData.description}
+              onChange={handleInputChange}
+              placeholder="Введите описание товара"
+              required
+              className="bg-[#DFDFDF] border border-[#363636] p-4 my-2 h-40 resize-none"
+            />
+          </div>
+
           <div className="flex flex-col mb-5">
             <h1 className="text-[#363636] text-3xl sm:text-3xl md:text-4xl lg:text-4xl font-bold mb-10 mt-5">
               Габариты и вес

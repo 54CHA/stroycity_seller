@@ -34,7 +34,7 @@ const AuthPage = () => {
 
     try {
       const response = await axios.post(
-        "https://api.bigbolts.ru/sign_in/seller",
+        "https://api.bigbolts.ru/sign-in/seller",
         userData,
         {
           headers: {
@@ -57,7 +57,7 @@ const AuthPage = () => {
         toastr.error("Failed to send user data");
         console.error("Failed to send user data");
       }
-      navigate("/"); // Redirect to the home page or any other desired page
+      navigate("/Store"); // Redirect to the home page or any other desired page
     } catch (error) {
       // Handle network or server error
       toastr.error("Error: " + error.message);
