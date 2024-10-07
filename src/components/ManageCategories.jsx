@@ -11,7 +11,20 @@ const ManageCategories = () => {
   const [newBrand, setNewBrand] = useState("");
   const [newMaterial, setNewMaterial] = useState("");
 
+  const getToken = () => {
+    return document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("jwt="))
+      ?.split("=")[1];
+  };
+
   useEffect(() => {
+    const token = getToken();
+    if (!token) {
+      console.error("No JWT token found. User may not be authenticated.");
+      return;
+    }
+
     axios
       .get(apiUrl + "/category")
       .then((response) => {
@@ -42,34 +55,84 @@ const ManageCategories = () => {
 
   const handleCreateCategory = () => {
     if (newCategory.trim() === "") return; // prevent empty category creation
+
+    const token = getToken();
+
+    if (!token) {
+      console.error("No JWT token found. User may not be authenticated.");
+      // You might want to redirect to login page or show an error message to the user
+      return;
+    }
+
     axios
-      .post(apiUrl + "/admin/category", { name: newCategory }) // Updated path
+      .post(
+        apiUrl + "/admin/category",
+        { name: newCategory },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
       .then((response) => {
+        console.log("Category created successfully:", response.data);
         setCategories([...categories, response.data]);
         setNewCategory("");
       })
       .catch((error) => {
-        console.error(error);
+        console.error(
+          "Error creating category:",
+          error.response ? error.response.data : error.message
+        );
       });
   };
 
   const handleCreateBrand = () => {
     if (newBrand.trim() === "") return;
+    const token = getToken();
+    if (!token) {
+      console.error("No JWT token found. User may not be authenticated.");
+      return;
+    }
     axios
-      .post(apiUrl + "/admin/brand", { name: newBrand }) // Updated path
+      .post(
+        apiUrl + "/admin/brand",
+        { name: newBrand },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
       .then((response) => {
         setBrands([...brands, response.data]);
         setNewBrand("");
       })
       .catch((error) => {
-        console.error(error);
+        console.error("Error creating brand:", error.response ? error.response.data : error.message);
       });
   };
 
   const handleCreateMaterial = () => {
     if (newMaterial.trim() === "") return;
+    const token = getToken();
+    if (!token) {
+      console.error("No JWT token found. User may not be authenticated.");
+      return;
+    }
     axios
-      .post(apiUrl + "/admin/material", { name: newMaterial }) // Updated path
+      .post(
+        apiUrl + "/admin/material",
+        { name: newMaterial },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
       .then((response) => {
         setMaterials([...materials, response.data]);
         setNewMaterial("");
@@ -130,7 +193,7 @@ const ManageCategories = () => {
           <li key={category.id}>
             {category.name}
             <button onClick={() => handleDeleteCategory(category.id)}>
-              Delete 
+              Delete
             </button>
           </li>
         ))}

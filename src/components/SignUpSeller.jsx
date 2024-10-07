@@ -47,7 +47,7 @@ const AuthPage = () => {
         // Handle successful response
         toastr.success("Регистрация прошла успешно");
         console.log("User registered successfully");
-        navigate("/user"); // Redirect to the home page
+        navigate("/signin"); // Redirect to the home page
       } else {
         // Handle error response
         toastr.error("Не удалось зарегистрироваться");
