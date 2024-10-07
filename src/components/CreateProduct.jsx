@@ -9,21 +9,23 @@ const CreateProduct = () => {
   const apiUrl = "https://api.bigbolts.ru";
   const [formData, setFormData] = useState({
     name: "",
-    brand_id: "",
-    material_id: "",
-    category_id: "",
+    brand_id: null,
+    material_id: null,
+    category_id: null,
     article: "",
-    price: "",
-    price_with_discount: "",
+    price: null,
+    price_with_discount: null,
     description: "",
-    length: "",
-    width: "",
-    height: "",
-    weight: "",
+    length: null,
+    width: null,
+    height: null,
+    weight: null,
   });
   const [brands, setBrands] = useState([]);
   const [materials, setMaterials] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [itemId, setItemId] = useState(null);
+  const [images, setImages] = useState([]);
 
   const token = document.cookie
     .split("; ")
@@ -59,16 +61,28 @@ const CreateProduct = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    let parsedValue = value;
+
+    // Convert specific fields to integers
+    if (['brand_id', 'material_id', 'category_id', 'price', 'price_with_discount', 'length', 'width', 'height', 'weight'].includes(name)) {
+      parsedValue = value === '' ? '' : parseInt(value, 10);
+    }
+
+    setFormData({ ...formData, [name]: parsedValue });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${apiUrl}/products`, formData, {
+      const response = await axios.post(`${apiUrl}/seller/item`, formData, {
         headers: { Authorization: `Bearer ${token}` },
       });
       console.log("Product created:", response.data);
+      setItemId(response.data.id); // Assuming the API returns the item ID
+      // Now that we have the item ID, we can upload images
+      if (images.length > 0) {
+        await handleImageUpload(response.data.id);
+      }
       // Handle success (e.g., show a success message, redirect to product list)
     } catch (error) {
       console.error("Error creating product:", error);
@@ -76,8 +90,36 @@ const CreateProduct = () => {
     }
   };
 
-  const handleImageUpload = (e) => {
-    // Handle image upload logic here
+  const handleImageUpload = async (id) => {
+    const formData = new FormData();
+    formData.append('item_id', id);
+
+    images.forEach((file, index) => {
+      formData.append(`image`, file);
+    });
+
+    try {
+      const response = await axios.post(`${apiUrl}/seller/item/image`, formData, {
+        headers: { 
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data'
+        },
+      });
+
+      setUploadedImages(prevImages => [...prevImages, ...response.data]);
+      console.log("Images uploaded successfully:", response.data);
+      
+      // Clear the images state
+      setImages([]);
+    } catch (error) {
+      console.error("Error uploading images:", error);
+      // Handle error (e.g., show an error message)
+    }
+  };
+
+  const handleImageSelection = (e) => {
+    const files = Array.from(e.target.files);
+    setImages(files);
   };
 
   return (
@@ -176,7 +218,7 @@ const CreateProduct = () => {
             <input
               type="text"
               name="article"
-              value={formData.article}
+              value={formData.article}z
               onChange={handleInputChange}
               placeholder="Артикул"
               required
@@ -265,7 +307,7 @@ const CreateProduct = () => {
               <input
                 type="file"
                 multiple
-                onChange={handleImageUpload}
+                onChange={handleImageSelection}
                 accept="image/*"
                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                 id="fileInput"
