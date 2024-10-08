@@ -16,6 +16,7 @@ import toastr from "toastr";
 import "toastr/build/toastr.min.css";
 import AdminPanel from "./components/Admin";
 import ProductList from "./components/ProductList";
+import AddImages from "./components/AddImages";
 
 function App() {
   return (
@@ -87,6 +88,16 @@ function App() {
               <>
                 <LoggedInNavbar />
                 <CreateProduct />
+                <Footer />
+              </>
+            }
+          />
+          <Route
+            path="/Photo/:createdItemId"
+            element={
+              <>
+                <LoggedInNavbar />
+                <AddImages />
                 <Footer />
               </>
             }

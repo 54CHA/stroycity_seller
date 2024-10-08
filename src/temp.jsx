@@ -6,26 +6,25 @@ import axios from "axios";
 
 const CreateProduct = () => {
   const apiUrl = "https://api.bigbolts.ru";
-
   const [formData, setFormData] = useState({
-    article: "",
-    brand_id: "",
-    category_id: "",
     name: "",
+    brand_id: null,
+    material_id: null,
+    category_id: null,
+    article: "",
+    price: null,
+    price_with_discount: null,
     description: "",
-    height: "",
-    length: "",
-    material_id: "",
-    price: "",
-    price_with_discount: "",
-    quantity: "0",
-    weight: "",
-    width: "",
+    length: null,
+    width: null,
+    height: null,
+    weight: null,
   });
-
+  const [brands, setBrands] = useState([]);
   const [materials, setMaterials] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [brands, setBrands] = useState([]);
+  const [itemId, setItemId] = useState(null);
+  const [images, setImages] = useState([]);
 
   const token = document.cookie
     .split("; ")
@@ -33,103 +32,113 @@ const CreateProduct = () => {
     ?.split("=")[1];
 
   useEffect(() => {
-    const fetchMaterials = async () => {
+    const fetchData = async () => {
       try {
-        const response = await axios.get(apiUrl + "/material", {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setMaterials(response.data); // Assuming the API returns an array of materials
+        const [brandsResponse, materialsResponse, categoriesResponse] =
+          await Promise.all([
+            axios.get(`${apiUrl}/brand`, {
+              headers: { Authorization: `Bearer ${token}` },
+            }),
+            axios.get(`${apiUrl}/material`, {
+              headers: { Authorization: `Bearer ${token}` },
+            }),
+            axios.get(`${apiUrl}/category`, {
+              headers: { Authorization: `Bearer ${token}` },
+            }),
+          ]);
+
+        setBrands(brandsResponse.data);
+        setMaterials(materialsResponse.data);
+        setCategories(categoriesResponse.data);
       } catch (error) {
-        console.error("Error fetching materials:", error);
+        console.error("Error fetching data:", error);
       }
     };
 
-    const fetchCategories = async () => {
-      try {
-        const response = await axios.get(apiUrl + "/category", {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setCategories(response.data); // Assuming the API returns an array of categories
-      } catch (error) {
-        console.error("Error fetching categories:", error);
-      }
-    };
-
-    const fetchBrands = async () => {
-      try {
-        const response = await axios.get(apiUrl + "/brand", {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setBrands(response.data); // Assuming the API returns an array of brands
-      } catch (error) {
-        console.error("Error fetching brands:", error);
-      }
-    };
-
-    fetchMaterials();
-    fetchCategories();
-    fetchBrands(); // Fetch brands on component mount
-  }, []); // Fetch materials and categories on component mount
+    fetchData();
+  }, [token]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
+    let parsedValue = value;
 
-  const handleImageUpload = (e) => {
-    // Handle image upload logic here
-    const files = e.target.files;
-    // You can process the files here, e.g., upload them to a server
+    // Convert specific fields to integers
+    if (
+      [
+        "brand_id",
+        "material_id",
+        "category_id",
+        "price",
+        "price_with_discount",
+        "length",
+        "width",
+        "height",
+        "weight",
+      ].includes(name)
+    ) {
+      parsedValue = value === "" ? "" : parseInt(value, 10);
+    }
+
+    setFormData({ ...formData, [name]: parsedValue });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const requestBody = {
-        article: formData.article,
-        brand_id: parseInt(formData.brand_id),
-        category_id: parseInt(formData.category_id),
-        description: formData.description,
-        height: parseInt(formData.height),
-        length: parseInt(formData.length),
-        material_id: parseInt(formData.material_id),
-        name: formData.name,
-        price: parseFloat(formData.price),
-        price_with_discount: parseFloat(formData.price_with_discount) || null,
-        quantity: 0, // You may want to add a field for quantity in your form
-        weight: parseInt(formData.weight),
-        width: parseInt(formData.width),
-      };
-
-      const response = await axios.post(apiUrl + "/seller/item", requestBody, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
+      const response = await axios.post(`${apiUrl}/seller/item`, formData, {
+        headers: { Authorization: `Bearer ${token}` },
       });
+      console.log("Product created:", response.data);
 
-      if (response.status === 201) {
-        console.log("Product created successfully");
-        // You may want to add some user feedback here, like a success message or redirect
+      // Check if response contains the ID, then set the itemId state
+      if (response.data && response.data.id) {
+        const productId = response.data.id;
+        setItemId(productId); // Store the product ID
+
+        // Once the product is created, upload the images
+        if (images.length > 0) {
+          await handleImageUpload(productId); // Pass the created item ID
+        }
       } else {
-        console.error("Failed to create product");
-        // You may want to add some user feedback here, like an error message
+        console.error("Product created but no item ID returned in response.");
       }
     } catch (error) {
-      console.error("Error:", error);
-      // You may want to add some user feedback here, like an error message
+      console.error("Error creating product:", error);
+    }
+  };
+
+  const handleImageSelection = (e) => {
+    const selectedFiles = Array.from(e.target.files);
+    setImages(selectedFiles);
+  };
+
+  const handleImageUpload = async (id) => {
+    if (!id) {
+      console.error("Invalid item ID. Cannot upload images.");
+      return;
+    }
+    const formData = new FormData();
+    images.forEach((image) => {
+      formData.append("images", image);
+    });
+
+    try {
+      const response = await axios.post(
+        `${apiUrl}/seller/item/image?item_id=${id}`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+          params: {
+            item_id: id,
+          },
+        }
+      );
+      console.log("Images uploaded successfully:", response.data);
+    } catch (error) {
+      console.error("Error uploading images:", error);
     }
   };
 
@@ -230,6 +239,7 @@ const CreateProduct = () => {
               type="text"
               name="article"
               value={formData.article}
+              z
               onChange={handleInputChange}
               placeholder="Артикул"
               required
@@ -318,7 +328,7 @@ const CreateProduct = () => {
               <input
                 type="file"
                 multiple
-                onChange={handleImageUpload}
+                onChange={handleImageSelection}
                 accept="image/*"
                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                 id="fileInput"
@@ -331,6 +341,7 @@ const CreateProduct = () => {
               </label>
             </div>
           </div>
+
           <div className="flex justify-between">
             <Link to="/admin">
               <button
@@ -342,7 +353,7 @@ const CreateProduct = () => {
             </Link>
             <button
               type="submit"
-              className="block bg-[#ff8900] hover:bg-[#ff6a00] hover:scale-[1.01] px-4 py-2 text-[#ffffff]  text-center cursor-pointer text-lg sm:text-md md:text-lg lg:text-xl"
+              className="block bg-[#ff8900] hover:bg-[#ff6a00] hover:scale-[1.01] px-4 py-2 text-[#ffffff] text-center cursor-pointer text-lg sm:text-md md:text-lg lg:text-xl"
             >
               Завершить создание
             </button>

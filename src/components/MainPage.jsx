@@ -2,7 +2,8 @@ import { Link } from "react-router-dom";
 
 const MainPage = () => {
   return (
-    <div className="bg-[url('/images/sunrise.jpg')] bg-cover bg-center h-screen">
+    <div className="relative bg-[url('/images/sunrise.jpg')] bg-cover bg-center h-screen">
+      <div className="absolute inset-0 bg-slate-600 bg-opacity-30"></div>
       <div className="h-[86vh] relative w-[87%] m-auto">
         <div className=" h-full left-0 top-0 absolute " />
         <div className=" text-[#f9e6e4] text-[7vw] font-bold w-7/12 pt-20">

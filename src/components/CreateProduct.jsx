@@ -1,8 +1,7 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Cookies from "js-cookie";
 import axios from "axios";
 
 const CreateProduct = () => {
@@ -21,11 +20,11 @@ const CreateProduct = () => {
     height: null,
     weight: null,
   });
+  const navigate = useNavigate();
+
   const [brands, setBrands] = useState([]);
   const [materials, setMaterials] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [itemId, setItemId] = useState(null);
-  const [images, setImages] = useState([]);
 
   const token = document.cookie
     .split("; ")
@@ -64,8 +63,20 @@ const CreateProduct = () => {
     let parsedValue = value;
 
     // Convert specific fields to integers
-    if (['brand_id', 'material_id', 'category_id', 'price', 'price_with_discount', 'length', 'width', 'height', 'weight'].includes(name)) {
-      parsedValue = value === '' ? '' : parseInt(value, 10);
+    if (
+      [
+        "brand_id",
+        "material_id",
+        "category_id",
+        "price",
+        "price_with_discount",
+        "length",
+        "width",
+        "height",
+        "weight",
+      ].includes(name)
+    ) {
+      parsedValue = value === "" ? "" : parseInt(value, 10);
     }
 
     setFormData({ ...formData, [name]: parsedValue });
@@ -78,48 +89,12 @@ const CreateProduct = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       console.log("Product created:", response.data);
-      setItemId(response.data.id); // Assuming the API returns the item ID
-      // Now that we have the item ID, we can upload images
-      if (images.length > 0) {
-        await handleImageUpload(response.data.id);
-      }
-      // Handle success (e.g., show a success message, redirect to product list)
+      const createdItemId = response.data; // Store the item ID
+      navigate(`/photo/${createdItemId}`); // Pass item_id in the URL
     } catch (error) {
       console.error("Error creating product:", error);
       // Handle error (e.g., show an error message)
     }
-  };
-
-  const handleImageUpload = async (id) => {
-    const formData = new FormData();
-    formData.append('item_id', id);
-
-    images.forEach((file, index) => {
-      formData.append(`image`, file);
-    });
-
-    try {
-      const response = await axios.post(`${apiUrl}/seller/item/image`, formData, {
-        headers: { 
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data'
-        },
-      });
-
-      setUploadedImages(prevImages => [...prevImages, ...response.data]);
-      console.log("Images uploaded successfully:", response.data);
-      
-      // Clear the images state
-      setImages([]);
-    } catch (error) {
-      console.error("Error uploading images:", error);
-      // Handle error (e.g., show an error message)
-    }
-  };
-
-  const handleImageSelection = (e) => {
-    const files = Array.from(e.target.files);
-    setImages(files);
   };
 
   return (
@@ -218,7 +193,8 @@ const CreateProduct = () => {
             <input
               type="text"
               name="article"
-              value={formData.article}z
+              value={formData.article}
+              z
               onChange={handleInputChange}
               placeholder="Артикул"
               required
@@ -299,27 +275,7 @@ const CreateProduct = () => {
               className="bg-[#DFDFDF] border border-[#363636] p-4 my-2"
             />
           </div>
-          <div className="mb-5 flex items-center justify-between">
-            <h1 className="text-[#363636] text-3xl sm:text-3xl md:text-4xl lg:text-4xl font-bold mb-10 mt-5">
-              Изображения
-            </h1>
-            <div className="relative">
-              <input
-                type="file"
-                multiple
-                onChange={handleImageSelection}
-                accept="image/*"
-                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                id="fileInput"
-              />
-              <label
-                htmlFor="fileInput"
-                className="block bg-[#DFDFDF] border border-[#363636] px-4 py-2 text-[#363636] font-bold text-center cursor-pointer text-lg sm:text-md md:text-lg lg:text-xl"
-              >
-                Добавить фото
-              </label>
-            </div>
-          </div>
+
           <div className="flex justify-between">
             <Link to="/admin">
               <button
@@ -333,7 +289,7 @@ const CreateProduct = () => {
               type="submit"
               className="block bg-[#ff8900] hover:bg-[#ff6a00] hover:scale-[1.01] px-4 py-2 text-[#ffffff]  text-center cursor-pointer text-lg sm:text-md md:text-lg lg:text-xl"
             >
-              Завершить создание
+              Продолжить
             </button>
           </div>
         </form>
