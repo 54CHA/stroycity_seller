@@ -1,25 +1,23 @@
-import productImage from "/public/WhiteBg.png";
+import productImage from "/public/WhiteBg.png"; // You can change this to dynamic images if needed
 
-const ProductAdmin = () => {
+const ProductCard = ({ product }) => {
   return (
     <div className="mx-auto flex gap-5">
       <img
-        src={productImage}
+        src={productImage} // You can replace this with actual image URL from product if available
         alt="product_image"
         className="w-[250px] h-[250px] object-cover"
       />
-      <div className="w-full max-w-[350px] ">
+      <div className="w-full max-w-[350px]">
         <div className="text-[#363636] text-2xl lg:text-[25px] font-bold mb-2 mt-[-7px]">
-          Назв товара
+          {product.name}
         </div>
         <div className="text-base lg:text-[25px] font-normal text-[#363636] leading-7">
-          Lorem ipsum odor amet, consectetuer adipiscing elit. Litora tempus
-          consequat interdum suscipit sodales condimentum auctor? Sit orci
-          tempor cursus suspendi
+          {product.description}
         </div>
         <div className="flex items-center gap-2 text-[#ff8800] text-xl lg:text-[25px] font-bold mb-20 mt-3">
-          <div>000₽</div>
-          <div className="opacity-50">/1м²</div>
+          <div>{product.price}₽</div>
+          <div className="opacity-50">/1м²</div> {/* Adjust if needed */}
         </div>
         <div className="flex items-center justify-between flex-row gap-4"></div>
       </div>
@@ -27,4 +25,4 @@ const ProductAdmin = () => {
   );
 };
 
-export default ProductAdmin;
+export default ProductCard;

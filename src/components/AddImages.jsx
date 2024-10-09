@@ -46,7 +46,7 @@ const AddImages = () => {
   return (
     <div className="bg-[#DFDFDF] pb-40">
       <div className="w-[87%] m-auto">
-        <div className="mb-5 flex items-center justify-between ">
+        <div className="mb-5 flex-col items-center justify-between ">
           <h1 className="text-[#363636] text-3xl sm:text-3xl md:text-4xl lg:text-4xl font-bold mb-10 mt-5 ">
             Изображения
           </h1>
@@ -61,17 +61,18 @@ const AddImages = () => {
             />
             <label
               htmlFor="fileInput"
-              className="block bg-[#DFDFDF] border border-[#363636] px-4 py-2 text-[#363636] font-bold text-center cursor-pointer text-lg sm:text-md md:text-lg lg:text-xl"
+              className="block bg-[#DFDFDF] border border-[#363636] px-4 py-2 text-[#363636] font-bold text-center cursor-pointer text-lg sm:text-md md:text-lg lg:text-xl mb-5"
             >
               Добавить фото
             </label>
-            <button
-              type="submit"
-              className="block bg-[#ff8900] hover:bg-[#ff6a00] hover:scale-[1.01] px-4 py-2 text-[#ffffff]  text-center cursor-pointer text-lg sm:text-md md:text-lg lg:text-xl"
-            >
-              Завершить
-            </button>
           </div>
+          <Link
+            to="/productlist"
+            type="submit"
+            className="block bg-[#ff8900] hover:bg-[#ff6a00] hover:scale-[1.01] px-4 py-2 text-[#ffffff]  text-center cursor-pointer text-lg sm:text-md md:text-lg lg:text-xl"
+          >
+            Завершить
+          </Link>
         </div>
       </div>
     </div>

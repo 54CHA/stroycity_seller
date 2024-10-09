@@ -109,9 +109,9 @@ const CreateProduct = () => {
           Товары
         </div>
         <div className="text-[#363636] text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-bold mb-10 mt-10 ">
-          Список товаров
+          Создание товара
         </div>
-        <div className="flex gap-5 mb-10 text-[18px]">
+        {/* <div className="flex gap-5 mb-10 text-[18px]">
           <div className="p-1 flex shadow-md bg-white px-2">
             <option value="">
               Все
@@ -134,7 +134,7 @@ const CreateProduct = () => {
           <div className="p-1 flex shadow-md bg-white px-2">
             <option value="">Сняты с продажи</option>
           </div>
-        </div>
+        </div> */}
         <form onSubmit={handleSubmit} className="w-full md:w-5/12">
           <div className="flex flex-col mb-5 ">
             <h1 className="text-[#363636] text-3xl sm:text-3xl md:text-4xl lg:text-4xl font-bold mb-10 mt-5 ">
@@ -277,7 +277,7 @@ const CreateProduct = () => {
           </div>
 
           <div className="flex justify-between">
-            <Link to="/admin">
+            <Link to="/productlist">
               <button
                 type="button"
                 className="block bg-[#DFDFDF] border border-[#363636] px-4 py-2 text-[#363636] font-bold text-center cursor-pointer text-lg sm:text-md md:text-lg lg:text-xl"
