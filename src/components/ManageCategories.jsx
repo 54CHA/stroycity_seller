@@ -111,7 +111,10 @@ const ManageCategories = () => {
         setNewBrand("");
       })
       .catch((error) => {
-        console.error("Error creating brand:", error.response ? error.response.data : error.message);
+        console.error(
+          "Error creating brand:",
+          error.response ? error.response.data : error.message
+        );
       });
   };
 

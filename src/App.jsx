@@ -7,6 +7,7 @@ import SignInPageSeller from "./components/SignInPageSeller";
 import LoggedInPage from "./components/LoggedInPage";
 import SignUpSeller from "./components/SignUpSeller";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Finances from "./components/Finances";
 import "./index.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import CreateProduct from "./components/CreateProduct";
@@ -108,6 +109,16 @@ function App() {
               <>
                 <LoggedInNavbar />
                 <ProductList />
+                <Footer />
+              </>
+            }
+          />
+          <Route
+            path="/Finances"
+            element={
+              <>
+                <LoggedInNavbar />
+                <Finances />
                 <Footer />
               </>
             }

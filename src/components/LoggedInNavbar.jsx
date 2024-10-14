@@ -1,10 +1,10 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Navbar = () => {
-  const storeName = "Название магазина";
-
+  const [storeName, setStoreName] = useState("Название магазина");
   const navigate = useNavigate();
 
   function deleteToken() {
@@ -13,6 +13,30 @@ const Navbar = () => {
   }
 
   useEffect(() => {
+    const fetchStoreName = async () => {
+      try {
+        // Assuming you have the JWT token stored in cookies
+        const token = document.cookie
+          .split("; ")
+          .find((row) => row.startsWith("jwt="))
+          ?.split("=")[1];
+
+        const response = await axios.get("https://api.bigbolts.ru/seller", {
+          headers: {
+            Authorization: `Bearer ${token}`, // Pass the auth token
+          },
+        });
+
+        // Update store name from the response
+        setStoreName(response.data.shop_name || "Название магазина");
+      } catch (error) {
+        console.error("Error fetching store data:", error);
+      }
+    };
+
+    fetchStoreName();
+
+    // Tawk.to chat script
     var Tawk_API = Tawk_API || {},
       Tawk_LoadStart = new Date();
     (function () {
@@ -34,15 +58,15 @@ const Navbar = () => {
             <img
               src="/images/logo.png"
               alt="logo"
-              className="w-[50px] ml-10 "
+              className="w-[50px] ml-5 md:ml-10"
             />
-            <div className="text-[#ff8800] text-[30px] sm:text-[40px] md:text-[50px] font-bold border-[#cacaca] h-[100px] border-r flex items-center whitespace-nowrap pr-10">
+            <div className="text-[#ff8800] text-[30px] sm:text-[40px] md:text-[50px] font-bold border-[#cacaca] h-[100px] border-r lg:flex items-center md:pr-10 hidden whitespace-nowrap">
               СТРОЙ СИТИ
             </div>
           </Link>
         </div>
-        <div className="flex justify-between w-full ml-[50px]">
-          <div className="flex">
+        <div className="flex justify-around w-full md:ml-[50px]">
+          <div className="flex flex-col gap-2 md:gap-0 md:flex-row">
             <Link
               to="/productlist"
               className="text-[#363636] text-sm sm:text-base md:text-lg lg:text-xl font-medium hover:text-[#ff8800] transition duration-300 px-10 "
@@ -50,20 +74,20 @@ const Navbar = () => {
               Товары
             </Link>
             <Link
-              to="/store"
+              to="/Finances"
               className="text-[#363636] text-sm sm:text-base md:text-lg lg:text-xl font-medium hover:text-[#ff8800] transition duration-300 px-10 "
             >
               Финансы
             </Link>
           </div>
-          <div>
+          <div className="flex flex-col-reverse gap-2 md:gap-0 md:flex-row">
             <button
               className="underline text-[#363636] text-sm sm:text-base md:text-lg lg:text-xl font-medium hover:text-[#ff8800] transition duration-300 "
               onClick={deleteToken}
             >
               Выйти
             </button>
-            <a className="text-[#363636] text-sm sm:text-base md:text-lg lg:text-xl font-medium hover:text-[#7f7f7f] transition duration-300 px-10">
+            <a className="text-[#363636] text-sm sm:text-base md:text-lg lg:text-xl font-medium hover:text-[#7f7f7f] transition duration-300 md:px-10 whitespace-nowrap">
               "{storeName}"
             </a>
           </div>

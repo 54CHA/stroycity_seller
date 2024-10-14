@@ -10,6 +10,7 @@ const AuthPage = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [shop_name, setShopName] = useState("");
 
   const handleNameChange = (e) => {
     setName(e.target.value);
@@ -23,10 +24,15 @@ const AuthPage = () => {
     setPassword(e.target.value);
   };
 
+  const handleShopNameChange = (e) => {
+    setShopName(e.target.value);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent form from refreshing the page on submit
 
     const userData = {
+      shop_name,
       email,
       password,
       name,
@@ -62,9 +68,22 @@ const AuthPage = () => {
 
   return (
     <div className="flex justify-center items-center h-screen">
-      <div className="bg-white p-8 rounded-lg shadow-md w-[20%]">
+      <div className="bg-white p-8 rounded-lg shadow-md w-[90%] sm:w-[70%] mn:w-[50%] lg:w-[40%] xl:w-[30%] 3xl:w-[20%]">
         <h2 className="text-2xl font-bold mb-6">{"Регистрация"}</h2>
         <form onSubmit={handleSubmit}>
+          <div className="mb-6">
+            <label htmlFor="name" className="block mb-2">
+              Название магазина
+            </label>
+            <input
+              type="text"
+              id="shopname"
+              value={shop_name}
+              onChange={handleShopNameChange}
+              required
+              className="w-full border border-gray-300 rounded-md px-3 py-2"
+            />
+          </div>
           <div className="mb-6">
             <label htmlFor="name" className="block mb-2">
               Имя

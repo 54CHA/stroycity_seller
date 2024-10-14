@@ -48,7 +48,7 @@ const AddImages = () => {
       <div className="w-[87%] m-auto">
         <div className="mb-5 flex-col items-center justify-between ">
           <h1 className="text-[#363636] text-3xl sm:text-3xl md:text-4xl lg:text-4xl font-bold mb-10 mt-5 ">
-            Изображения
+            Изображения ПОКА НЕ РАБОТАЮТ
           </h1>
           <div className="relative">
             <input

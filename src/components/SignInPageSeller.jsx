@@ -7,13 +7,8 @@ import "toastr/build/toastr.min.css";
 const AuthPage = () => {
   const navigate = useNavigate();
 
-  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  const handleNameChange = (e) => {
-    setName(e.target.value);
-  };
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -67,22 +62,9 @@ const AuthPage = () => {
 
   return (
     <div className="flex justify-center items-center h-screen">
-      <div className="bg-white p-8 rounded-lg shadow-md w-[20%]">
+      <div className="bg-white p-8 rounded-lg shadow-md w-[90%] sm:w-[70%] mn:w-[50%] lg:w-[40%] xl:w-[30%] 3xl:w-[20%]">
         <h2 className="text-2xl font-bold mb-6">{"Войти"}</h2>
         <form onSubmit={handleSubmit}>
-          <div className="mb-6">
-            <label htmlFor="name" className="block mb-2">
-              Имя
-            </label>
-            <input
-              type="text"
-              id="name"
-              value={name}
-              onChange={handleNameChange}
-              className="w-full border border-gray-300 rounded-md px-3 py-2"
-              required
-            />
-          </div>
           <div className="mb-4">
             <label htmlFor="email" className="block mb-2">
               Email
@@ -119,7 +101,7 @@ const AuthPage = () => {
             </button>
             <p className="m-auto mt-1">
               Нет аккаунта?
-              <Link to="/SignUp" className=" text-[#ff8800] mx-1">
+              <Link to="/Signup" className=" text-[#ff8800] mx-1">
                 Зарегистрироваться
               </Link>
             </p>

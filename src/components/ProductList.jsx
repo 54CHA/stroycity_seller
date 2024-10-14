@@ -23,7 +23,10 @@ const ProductList = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-        setProducts(response.data.items); // Assuming `items` is the array of products
+        // Check if response.data.items is an array before setting it
+        setProducts(
+          Array.isArray(response.data.items) ? response.data.items : []
+        );
       } catch (error) {
         console.error("Error fetching the products:", error);
       }
@@ -91,7 +94,7 @@ const ProductList = () => {
         )}
 
         {/* Pagination Controls */}
-        <div className="flex  mt-20">
+        <div className="flex mt-20 flex-wrap justify-center mn:justify-start">
           {Array.from({ length: totalPages }, (_, index) => (
             <button
               key={index + 1}
@@ -105,15 +108,21 @@ const ProductList = () => {
               {index + 1}
             </button>
           ))}
-          <button
-            onClick={handleNextPage}
-            className={`mx-1 px-3 py-1 rounded text-[25px] ${
-              currentPage < totalPages ? " text-[#ff8800]" : "opacity-30"
-            }`}
-            disabled={currentPage >= totalPages} // Disable if on the last page
-          >
-            Следующая страница
-          </button>
+          {currentProducts.length > 0 && ( // Only show if there are products
+            <button
+              onClick={handleNextPage}
+              className={`mx-1 px-3 py-1 rounded text-[25px]  ${
+                currentPage < totalPages ? " text-[#ff8800]" : "opacity-30"
+              }`}
+              disabled={currentPage >= totalPages} // Disable if on the last page
+            >
+              <span className="">Следующая страница</span>
+              <FontAwesomeIcon
+                icon={faArrowRight}
+                className="ml-1 translate-y-[2px]"
+              />{" "}
+            </button>
+          )}
         </div>
       </div>
     </div>
