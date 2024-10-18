@@ -6,16 +6,21 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 
 const AddImages = () => {
-  const { itemId } = useParams();
+  const { createdItemId } = useParams();
 
   const apiUrl = "https://api.bigbolts.ru";
   const handleImageSelection = async (e) => {
     const files = e.target.files;
     const formData = new FormData();
     for (let i = 0; i < files.length; i++) {
-      formData.append("images", files[i]); // Append each image file
+      formData.append("image", files[i]); // Append each image file
     }
 
+
+    for (let pair of formData.entries()) {
+      console.log(pair[0], pair[1]);
+    }
+    
     const token = document.cookie
       .split("; ")
       .find((row) => row.startsWith("jwt="))
@@ -23,15 +28,12 @@ const AddImages = () => {
 
     try {
       const response = await axios.post(
-        `${apiUrl}/seller/item/image?item_id=${itemId}`,
+        `${apiUrl}/seller/item/image?item_id=${createdItemId}`, // Pass item_id in the URL
         formData,
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-          params: {
-            item_id: { itemId },
+            "Content-Type": "multipart/form-data", // Correct Content-Type
           },
         }
       );
@@ -46,11 +48,8 @@ const AddImages = () => {
   return (
     <div className="bg-[#DFDFDF] pb-40">
       <div className="w-[87%] m-auto">
-        <div className="mb-5 flex-col items-center justify-between ">
-          <h1 className="text-[#363636] text-3xl sm:text-3xl md:text-4xl lg:text-4xl font-bold mb-10 mt-5 ">
-            Изображения ПОКА НЕ РАБОТАЮТ
-          </h1>
-          <div className="relative">
+        <div className="mb-5 flex-col items-center justify-between pt-[100px] w-2/12 m-auto">
+            <div className="relative">
             <input
               type="file"
               multiple
